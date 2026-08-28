@@ -1,0 +1,76 @@
+<app-header />
+
+<main class="mx-auto max-w-4xl space-y-6 px-4 py-6">
+  <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-slate-900">Gestionar Solicitudes de Préstamos</h2>
+      <span class="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
+        {{ pendientes() }} pendientes
+      </span>
+    </div>
+
+    @if (cargando()) {
+      <p class="mt-4 text-sm text-slate-500">Cargando…</p>
+    } @else if (lista().length === 0) {
+      <p class="mt-4 text-sm text-slate-500">No hay solicitudes registradas.</p>
+    } @else {
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="text-xs uppercase tracking-wide text-slate-500">
+            <tr>
+              <th class="px-3 py-2">#</th>
+              <th class="px-3 py-2">Solicitante</th>
+              <th class="px-3 py-2">Monto</th>
+              <th class="px-3 py-2">Plazo</th>
+              <th class="px-3 py-2">Estado</th>
+              <th class="px-3 py-2">Resuelto por</th>
+              <th class="px-3 py-2 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (p of lista(); track p.id) {
+              <tr>
+                <td class="px-3 py-2 text-slate-500">{{ p.id }}</td>
+                <td class="px-3 py-2 text-slate-700">{{ p.solicitanteNombre ?? 'Usuario #' + p.usuarioId }}</td>
+                <td class="px-3 py-2 font-medium text-slate-900">
+                  {{ p.monto | currency: 'USD' : 'symbol' : '1.2-2' }}
+                </td>
+                <td class="px-3 py-2 text-slate-700">{{ p.plazoMeses }} meses</td>
+                <td class="px-3 py-2">
+                  <span class="rounded-full px-2 py-0.5 text-xs font-medium" [class]="badge(p.estado)">
+                    {{ p.estado }}
+                  </span>
+                </td>
+                <td class="px-3 py-2 text-slate-700">{{ p.resueltoPorNombre ?? '—' }}</td>
+                <td class="px-3 py-2">
+                  @if (p.estado === Estado.PENDIENTE) {
+                    <div class="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        [disabled]="procesando() !== null"
+                        (click)="aprobar(p)"
+                        class="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {{ procesando() === p.id ? '…' : 'Aprobar' }}
+                      </button>
+                      <button
+                        type="button"
+                        [disabled]="procesando() !== null"
+                        (click)="rechazar(p)"
+                        class="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {{ procesando() === p.id ? '…' : 'Rechazar' }}
+                      </button>
+                    </div>
+                  } @else {
+                    <p class="text-right text-xs text-slate-400">Resuelto</p>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>

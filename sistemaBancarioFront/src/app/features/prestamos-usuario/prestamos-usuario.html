@@ -1,0 +1,88 @@
+<app-header />
+
+<main class="mx-auto max-w-4xl space-y-6 px-4 py-6">
+  <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <h2 class="text-lg font-semibold text-slate-900">Solicitar Préstamo</h2>
+
+    <form class="mt-4 grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-start" [formGroup]="form" (ngSubmit)="solicitar()">
+      <div>
+        <label for="monto" class="block text-sm font-medium text-slate-700">Monto</label>
+        <input
+          id="monto"
+          type="number"
+          min="1"
+          step="1"
+          inputmode="numeric"
+          formControlName="monto"
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
+        />
+        <p class="mt-1 text-xs text-slate-500">Ingresa el monto sin puntos ni comas (ej. 5000).</p>
+        @if (form.controls.monto.touched && form.controls.monto.invalid) {
+          <p class="mt-1 text-xs text-red-600">Ingresa un monto mayor a 0.</p>
+        }
+      </div>
+
+      <div>
+        <label for="plazo" class="block text-sm font-medium text-slate-700">Plazo (meses)</label>
+        <input
+          id="plazo"
+          type="number"
+          min="1"
+          step="1"
+          formControlName="plazoMeses"
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
+        />
+        @if (form.controls.plazoMeses.touched && form.controls.plazoMeses.invalid) {
+          <p class="mt-1 text-xs text-red-600">Ingresa un plazo mayor a 0.</p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="enviando()"
+        class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 sm:mt-6"
+      >
+        {{ enviando() ? 'Enviando…' : 'Solicitar' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <h2 class="text-lg font-semibold text-slate-900">Mis Préstamos</h2>
+
+    @if (cargando()) {
+      <p class="mt-4 text-sm text-slate-500">Cargando…</p>
+    } @else if (lista().length === 0) {
+      <p class="mt-4 text-sm text-slate-500">Todavía no has solicitado ningún préstamo.</p>
+    } @else {
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="text-xs uppercase tracking-wide text-slate-500">
+            <tr>
+              <th class="px-3 py-2">#</th>
+              <th class="px-3 py-2">Monto</th>
+              <th class="px-3 py-2">Plazo</th>
+              <th class="px-3 py-2">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (p of lista(); track p.id) {
+              <tr>
+                <td class="px-3 py-2 text-slate-500">{{ p.id }}</td>
+                <td class="px-3 py-2 font-medium text-slate-900">
+                  {{ p.monto | currency: 'USD' : 'symbol' : '1.2-2' }}
+                </td>
+                <td class="px-3 py-2 text-slate-700">{{ p.plazoMeses }} meses</td>
+                <td class="px-3 py-2">
+                  <span class="rounded-full px-2 py-0.5 text-xs font-medium" [class]="badge(p.estado)">
+                    {{ p.estado }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>

@@ -1,0 +1,24 @@
+# =====================================================================
+#  Perfil 'postgres' — ejecución production-like (opcional).
+#
+#  Copia este archivo como 'application-postgres.properties' (mismo
+#  directorio) y pon tus credenciales reales. Ese archivo NO se versiona
+#  (está en .gitignore).
+#
+#  Requiere una BD 'sistema_bancario' ya creada, con el esquema aplicado
+#  a mano (ddl-auto=validate solo comprueba que las entidades coinciden).
+#
+#  Activar con:
+#     ./gradlew bootRun --args='--spring.profiles.active=postgres'
+# =====================================================================
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/sistema_bancario
+spring.datasource.username=postgres
+spring.datasource.password=TU_PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Hibernate solo valida que las entidades coincidan con el esquema real
+spring.jpa.hibernate.ddl-auto=validate
+
+# Sin semilla automática: los usuarios se insertan por SQL
+spring.sql.init.mode=never

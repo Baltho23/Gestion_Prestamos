@@ -1,0 +1,18 @@
+# .gitignore de la raíz — solo reglas transversales.
+# Cada subproyecto tiene además su propio .gitignore
+# (sistemabancario/.gitignore, sistemaBancarioFront/.gitignore).
+
+# ── Notas internas / asistente ──────────────────────────────────────
+CLAUDE.md
+.claude/
+
+# ── Credenciales locales de PostgreSQL (perfil 'postgres') ───────────
+# El archivo con la conexión real NO se versiona.
+# Se versiona la plantilla: application-postgres.properties.example
+sistemabancario/src/main/resources/application-postgres.properties
+
+# ── IDE / SO (nivel raíz) ───────────────────────────────────────────
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
