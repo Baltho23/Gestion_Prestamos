@@ -9,10 +9,11 @@ y el usuario consulta el estado de sus solicitudes.
 
 ## Contenido del repositorio
 
-| Carpeta | Qué es |
+| Carpeta / archivo | Qué es |
 |---|---|
 | `sistemabancario/` | API REST. Arquitectura hexagonal, Spring Data JPA, Spring Security + JWT, caché EHCache, tests JUnit 5. |
 | `sistemaBancarioFront/` | SPA Angular. Standalone components, Reactive Forms, Guards, interceptor JWT, Tailwind CSS. |
+| `TEORICA.md` | Respuestas de la parte teórica de la prueba. |
 
 ---
 
